@@ -1,0 +1,185 @@
+<html>
+<head>
+	 <link rel="stylesheet" href="mycss.css">
+	 <script src="jquery-3.2.1.min.js"></script>
+	 <script src="https://kit.fontawesome.com/f793633518.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="header">
+		<div id="title1">PLC S7 1200</div>
+        <div id="title2">TRAFFIC LIGHT SYSTEM</div>
+		<div id="DateNow">12:0:0 PM</div>
+		<div class="cont"><h3 class="neon">V L N</h3></div>
+	</div>
+	
+<div id="space"></div>
+
+<div id="content">	
+<div class="road1">
+<div class="tree"></div><div class="tree1"></div>
+<div class="center">
+	<div class="line1"></div>
+<div class="con1">
+	<div class = "circle" color="red"></div>
+	<div class = "circle" color="yellow"></div>
+	<div class = "circle" color="green"></div>
+</div> </div> </div>
+
+<div class="road2">
+<div class="notree">
+	<div class="line"></div>
+	<div class="con2">
+		<div class = "circle1" color="red"></div>
+		<div class = "circle1" color="yellow"></div>
+		<div class = "circle1" color="green"></div>
+	</div>
+</div>
+<div class="notree1">
+	<div class="line"></div>
+	<div class="con3">
+		<div class = "circle3" color="red"></div>
+		<div class = "circle3" color="yellow"></div>
+		<div class = "circle3" color="green"></div>
+</div>
+</div>
+</div>
+<div class="road4">
+<div class="tree">
+	<table colspan="3" cellpadding="7px" cellspacing="7px" id="table">
+		<tr>
+			<td align="left" style="text-align:justify" id ="start"> START </td>
+			<td class="button"><span class = "fa fa-power-off"></span><input type="checkbox" id='"START_HMI"'/></td>
+		</tr>
+		<tr>
+			<td align="left" style="text-align:justify" id ="auto"> AUTO </td>
+			<td class="button"><span class = "fa fa-power-off"></span><input type="checkbox" id='"AUTO"'/></td>
+		</tr>
+			
+		<tr>
+			<td align="left" style="text-align:justify" id ="manual"> MANUAL </td>
+			<td class="button"><span class = "fa fa-power-off"></span><input type="checkbox" id='"MANUAL"'/></td>
+		</tr>
+	</table>
+</div> <div class="tree1"></div>
+<div class="center">
+	<div class="line1"></div>
+<div class="con4">
+	<div class = "circle2" color="red"></div>
+	<div class = "circle2" color="yellow"></div>
+	<div class = "circle2" color="green"></div>
+</div></div></div>
+</div>
+	<script>
+		(function() {
+		var button0 = document.querySelectorAll('.button');
+		var nodes = [].slice.call(button0);
+		var checkbox;
+				nodes.forEach(function (buttonControl) {
+					//console.log(buttonControl.lastElementChild);
+					if (buttonControl.className == ("button on")) {
+						buttonControl.lastElementChild.checked = true;
+					}
+					buttonControl.addEventListener("click", function toggleSwitch() {
+						if (buttonControl.className == "button on") {
+							buttonControl.className = 'button off';
+						} 
+						else {
+							buttonControl.className = ("button on");
+						}
+						checkbox = buttonControl.lastElementChild;
+						checkbox.checked = !checkbox.checked;
+						url="data.htm";
+						var ival = +checkbox.checked;
+						var sdata = checkbox.id;
+						//alert(ival);						
+						sdata=escape(sdata)+'='+ival;
+						//alert(sdata);
+						$.post(url,sdata,function(result,status){});
+					}, false);
+			});
+		
+		const circles = document.querySelectorAll('.circle');
+		const circles2 = document.querySelectorAll('.circle2');
+		const circles1 = document.querySelectorAll('.circle1');
+		const circles3 = document.querySelectorAll('.circle3');
+		
+		setInterval(function() {
+				url = "data.htm";
+				$.getJSON(url, function(kq) {
+					if (kq["Red"] == 1) {
+						circles[0].className = 'circle red'; 
+						circles2[0].className = 'circle red';
+					}
+					else {
+						circles[0].className = 'circle';
+						circles2[0].className = 'circle2'; 
+					}
+					if (kq["Yellow"] == 1) {
+						circles[1].className = 'circle yellow'; 
+						circles2[1].className = 'circle yellow';
+					}
+					else {
+						circles[1].className = 'circle';
+						circles2[1].className = 'circle2';
+					}
+					if (kq["Green"] == 1) {
+						circles[2].className = 'circle green';
+						circles2[2].className = 'circle green';
+					}
+					else { 
+						circles[2].className = 'circle';
+						circles2[2].className = 'circle2';
+					}
+					
+					////////////////////////////////////////////////////////
+					
+					if (kq["Red1"] == 1) {
+						circles1[0].className = 'circle red'; 
+						circles3[0].className = 'circle red';
+					}
+					else {
+						circles1[0].className = 'circle1';
+						circles3[0].className = 'circle3'; 
+					}
+					if (kq["Yellow1"] == 1) {
+						circles1[1].className = 'circle yellow'; 
+						circles3[1].className = 'circle yellow';
+					}
+					else {
+						circles1[1].className = 'circle1';
+						circles3[1].className = 'circle3';
+					}
+					if (kq["Green1"] == 1) {
+						circles1[2].className = 'circle green';
+						circles3[2].className = 'circle green';
+					}
+					else { 
+						circles1[2].className = 'circle1';
+						circles3[2].className = 'circle3';
+					}
+					
+					//////////////////////////////////////////////////////////////
+					
+					if (kq["Start"] == 1) {
+						button0[0].className == 'button on';
+					} 
+					else { 
+						button0[0].className == 'button off'; 
+					}
+					if (kq["Auto"] == 1) {
+						button0[0].className == 'button on';
+					} 
+					else { 
+						button0[0].className == 'button off'; 
+					}
+					if (kq["Manual"] == 1) {
+						button0[0].className == 'button on';
+					} 
+					else { 
+						button0[0].className == 'button off'; 
+					}
+				});
+		}, 200);
+}) ()
+	</script>
+</body>
